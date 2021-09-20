@@ -101,7 +101,6 @@ router.post("/login", (req, res) => {
 
 // PUT /api/users/1
 router.put("/:id", (req, res) => {
-    router.put("/:id", (req, res) => {
         // expects {username: 'Lernantino', email: 'lernantino@gmail.com', password: 'password1234'}
 
         // if req.body has exact key/value pairs to match, you can just use `req.body` instead
@@ -124,7 +123,6 @@ router.put("/:id", (req, res) => {
             res.status(500).json(err);
         });
     });
-});
 
 // DELETE /api/users/1
 router.delete("/:id", (req, res) => {
