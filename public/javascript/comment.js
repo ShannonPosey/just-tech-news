@@ -1,5 +1,3 @@
-const { addListener } = require("nodemon");
-
 async function commentFormHandler(event) {
     event.preventDefault();
 

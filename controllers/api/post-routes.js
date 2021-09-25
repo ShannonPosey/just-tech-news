@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const sequelize = require("../../config/connection");
 const {Post, User, Comment, Vote} = require("../../models");
+const withAut = require("../../utils/auth");
 
 
 // get all users
@@ -74,7 +75,7 @@ router.get("/:id", (req, res) => {
 });
 
 // get posts
-router.post("/", (req, res) => {
+router.post("/", withAut, (req, res) => {
     // expects {title: 'Taskmaster goes public!', post_url: 'https://taskmaster.com/press', user_id: 1}
   Post.create({
       title: req.body.title,
@@ -89,14 +90,14 @@ router.post("/", (req, res) => {
 });
 
 // PUT /api/posts/upvote
-router.put("/upvote", (req, res) => {
+router.put("/upvote", withAut, (req, res) => {
     // make sure the session exists first
     if (req.session) {
         // pass session id along with all destructed properties on req.body
     
     // custom static method created in models/Post.js
-    Post.upvote({ ...req.body, user_id: req.session.user_id}, {Vot, Comment, User})
-    .then(updatedPostData => res.json(updatedPostData))
+    Post.upvote({ ...req.body, user_id: req.session.user_id}, {Vote, Comment, User})
+    .then(updatedVoteData => res.json(updatedVoteData))
         .catch(err => {
             console.log(err);
             res.status(400).json(err);
@@ -105,7 +106,7 @@ router.put("/upvote", (req, res) => {
    });
 
 // get post by user
-router.put("/:id", (req, res) => {
+router.put("/:id", withAut, (req, res) => {
     Post.update(
         {
         title: req.body.title,
@@ -130,7 +131,7 @@ router.put("/:id", (req, res) => {
 });
 
 // delete post
-router.delete("/:id", (req, res) => {
+router.delete("/:id", withAut, (req, res) => {
     Post.destroy({
         where: {
             id: req.params.id
